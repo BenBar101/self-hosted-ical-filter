@@ -5,36 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iCal Filter Configurator</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
-        h1, h2 { border-bottom: 1px solid #ddd; padding-bottom: 8px; }
-        input[type="text"] { width: 100%; padding: 8px; margin-bottom: 1rem; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 2rem auto; padding: 0 1rem; color: #e6edf3; background-color: #0d1117; }
+        h1, h2 { border-bottom: 1px solid #30363d; padding-bottom: 8px; }
+        input[type="text"] { width: 100%; padding: 8px; margin-bottom: 1rem; box-sizing: border-box; background-color: #010409; border: 1px solid #30363d; color: #e6edf3; border-radius: 6px; }
         button { background-color: #238636; color: white; padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
-        button:disabled { background-color: #999; cursor: not-allowed; }
-        #event-list { border: 1px solid #ddd; padding: 10px; border-radius: 6px; max-height: 300px; overflow-y: auto; }
+        button:disabled { background-color: #555; cursor: not-allowed; }
+        #event-list { border: 1px solid #30363d; background-color: #161b22; padding: 10px; border-radius: 6px; max-height: 300px; overflow-y: auto; }
         .event-item { display: block; margin-bottom: 5px; }
-        .error { color: red; font-weight: bold; }
+        .info { background-color: #161b22; border: 1px solid #30363d; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;}
         .hidden { display: none; }
     </style>
 </head>
 <body>
     <h1>iCal Filter Configurator</h1>
-    <p>This page will help you create the configuration file needed to filter your calendar. The configuration will be saved to this repository.</p>
 
-    <h2>Step 1: Enter your iCal Link</h2>
-    <input type="text" id="icalUrl" placeholder="https://example.com/path/to/your/calendar.ics">
-    <button id="fetchBtn" onclick="fetchEvents()">Fetch Event Types</button>
-    <p id="error" class="error hidden"></p>
-
-    <div id="filter-section" class="hidden">
-        <h2>Step 2: Choose Events to HIDE</h2>
-        <p>Check the box next to any event type you want to remove from your calendar.</p>
-        <div id="event-list"></div>
+    <!-- PHASE 1: User needs to input their link -->
+    <div id="phase1">
+        <div class="info">
+            <h2>Step 1: Save Your iCal Link</h2>
+            <p>Paste your full iCal link below. Clicking the button will redirect you to GitHub to save a temporary file. This will trigger a background process to find all the event types in your calendar.</p>
+        </div>
+        <input type="text" id="icalUrlInput" placeholder="https://example.com/path/to/your/calendar.ics">
+        <button id="saveLinkBtn">Save Link and Fetch Events</button>
     </div>
 
-    <div id="generate-section" class="hidden">
-        <h2>Step 3: Generate Configuration File</h2>
-        <p>This will take you to GitHub to save a `config.json` file to your repository. Simply scroll down and click the green "Commit new file" button on that page.</p>
-        <button id="generateBtn" onclick="generateConfigFile()">Generate Configuration File</button>
+    <!-- PHASE 2: User has saved the link and events have been found -->
+    <div id="phase2" class="hidden">
+        <div class="info">
+            <h2>Step 2: Choose Events to HIDE</h2>
+            <p>Your event types have been found! Check the box next to any event you want to remove. When you're done, click the button to save your final configuration.</p>
+        </div>
+        <div id="event-list"></div>
+        <br>
+        <button id="saveFilterBtn">Save Final Filter</button>
     </div>
 
     <script src="script.js"></script>
