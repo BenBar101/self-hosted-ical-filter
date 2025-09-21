@@ -8,6 +8,13 @@ on:
 jobs:
   fetch-and-parse:
     runs-on: ubuntu-latest
+    
+    # --- THIS IS THE FIX ---
+    # This block grants the job permission to write back to the repository.
+    permissions:
+      contents: write
+    # --- END OF FIX ---
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -23,7 +30,6 @@ jobs:
             
             async function run() {
               const tempConfig = JSON.parse(await fs.readFile('temp-config.json', 'utf8'));
-              // Disguise the request with a browser User-Agent to prevent being blocked
               const requestOptions = { headers: { 'User-Agent': 'Mozilla/5.0' } };
               const events = await ical.async.fromURL(tempConfig.icalUrl, requestOptions);
               const uniqueEvents = new Set();
