@@ -1,46 +1,32 @@
 # Self-Hosted iCal Filter
 
-This repository allows you to create a new, filtered version of any public iCal calendar link. It automatically removes events you don't want to see.
+This repository creates a filtered version of any iCal calendar link, running for free on your own GitHub account. The calendar automatically refreshes approximately every hour.
 
-The entire process is free, private, and runs on your own GitHub account. The calendar will automatically refresh with new events approximately every hour.
+## Setup Instructions (The Simple Way)
 
-## Setup Instructions
+The entire setup is done through a guided web page.
 
-Follow these steps carefully. The entire setup should take less than 5 minutes.
+### Step 1: Create Your Repository & Enable Pages
 
-### Step 1: Create Your Repository
-
-Click the green **"Use this template"** button at the top of this page, then select **"Create a new repository"**. This will create a personal copy of this tool under your own GitHub account.
-
-### Step 2: Enable GitHub Pages
-
-1.  In your newly created repository, go to the **"Settings"** tab.
-2.  On the left-hand menu, click on **"Pages"**.
+1.  Click the green **"Use this template"** button -> **"Create a new repository"**.
+2.  In your new repository, go to **Settings > Pages**.
 3.  Under "Branch," select `main` and click **"Save"**.
-4.  Wait about 2-3 minutes for the site to be deployed. You will see a green message saying, "Your site is live at..."
+4.  Wait 2-3 minutes for the site to deploy. You will see a green message: "Your site is live at..."
 
-### Step 3: Configure Your Filter
+### Step 2: Configure Your Calendar
 
-1.  Once your site is live, visit the URL provided by GitHub Pages. It will look like this:
+1.  Visit your live site URL from the step above. It will look like:
     `https://YOUR-USERNAME.github.io/YOUR-REPOSITORY-NAME/`
-2.  Follow the instructions on that page:
-    *   Paste your original iCal link.
-    *   Click "Fetch Event Types" to see a list of all unique events in your calendar.
-    *   Check the boxes next to the events you wish to **hide**.
-    *   Click "Generate Configuration File".
-3.  You will be taken to a new page on GitHub titled "Create new file". The content will be pre-filled for you. Simply scroll down and click the green **"Commit new file"** button.
+2.  Follow the simple two-phase process on that page. You will be guided to:
+    a. Save your iCal link.
+    b. Wait a minute and refresh the page to see your event types automatically appear.
+    c. Select which events to hide and save your final filter.
 
-### Step 4: Run the Filter for the First Time
+### Step 3: Get Your New Calendar Link
 
-1.  Go to the **"Actions"** tab of your repository.
-2.  On the left, click on the **"Generate Filtered iCal Feed"** workflow.
-3.  You will see a message: "This workflow has a workflow_dispatch event trigger." Click the **"Run workflow"** button on the right.
-
-### Step 5: Get Your New Calendar Link!
-
-1.  After the action has finished running (the icon next to it will turn into a green checkmark), go back to the **"Code"** tab of your repository.
-2.  You will now see a new file named `filtered-calendar.ics`.
-3.  Click on this file, and then click the **"Raw"** button.
+1.  After completing the setup, a main filter process will run automatically.
+2.  Go to the **"Code"** tab of your repository. After a minute or two, a file named `filtered-calendar.ics` will appear.
+3.  Click on this file, then click the **"Raw"** button.
 4.  Copy the URL from your browser's address bar. **This is your new, filtered calendar link.**
 
-You can now subscribe to this link in any calendar app (Google Calendar, Apple Calendar, etc.). It will automatically update with new events about once an hour.
+You can now subscribe to this link in any calendar app. It's fully automated!
