@@ -45,6 +45,7 @@ function saveLinkAndFetch() {
 
 // --- Function to handle PHASE 2: Saving the Final Filter ---
 function saveFinalFilter() {
+    // The icalUrlInput is visually part of phase1, but we need its value here
     const icalUrl = document.getElementById('icalUrlInput').value;
     const checkedBoxes = document.querySelectorAll('#event-list input[type="checkbox"]:checked');
     const filters = Array.from(checkedBoxes).map(cb => cb.value);
@@ -63,7 +64,10 @@ async function checkConfigurationState() {
             return;
         }
         const data = await response.json();
+        
+        // Populate the UI for Phase 2
         document.getElementById('icalUrlInput').value = data.icalUrl;
+        document.getElementById('icalUrlInput').readOnly = true; // Lock the input
 
         const eventListDiv = document.getElementById('event-list');
         eventListDiv.innerHTML = '';
