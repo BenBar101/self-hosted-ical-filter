@@ -8,8 +8,8 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 2rem auto; padding: 0 1rem; color: #e6edf3; background-color: #0d1117; }
         h1, h2 { border-bottom: 1px solid #30363d; padding-bottom: 8px; }
         input[type="text"] { width: 100%; padding: 8px; margin-bottom: 1rem; box-sizing: border-box; background-color: #010409; border: 1px solid #30363d; color: #e6edf3; border-radius: 6px; }
+        input:read-only { background-color: #161b22; color: #888; }
         button { background-color: #238636; color: white; padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
-        button:disabled { background-color: #555; cursor: not-allowed; }
         #event-list { border: 1px solid #30363d; background-color: #161b22; padding: 10px; border-radius: 6px; max-height: 300px; overflow-y: auto; }
         .event-item { display: block; margin-bottom: 5px; }
         .info { background-color: #161b22; border: 1px solid #30363d; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;}
@@ -20,25 +20,30 @@
 <body>
     <h1>iCal Filter Configurator</h1>
 
-    <!-- PHASE 1: User needs to input their link -->
+    <!-- SECTION 1: CORE INFO (Always Visible) -->
+    <div class="info">
+        <h2>Your Information</h2>
+        <p>This information is used to build the correct configuration for your repository.</p>
+    </div>
+    <div class="grid">
+        <input type="text" id="githubUser" placeholder="Your GitHub Username">
+        <input type="text" id="githubRepo" placeholder="Your Repository Name">
+    </div>
+    <input type="text" id="icalUrlInput" placeholder="Paste your full iCal link here">
+
+    <!-- SECTION 2: PHASE-SPECIFIC ACTIONS -->
+    
+    <!-- PHASE 1: User needs to save their link -->
     <div id="phase1">
-        <div class="info">
-            <h2>Step 1: Provide Your Info</h2>
-            <p>First, tell us where this repository lives. Then, paste your iCal link.</p>
-        </div>
-        <div class="grid">
-            <input type="text" id="githubUser" placeholder="Your GitHub Username">
-            <input type="text" id="githubRepo" placeholder="Your Repository Name">
-        </div>
-        <input type="text" id="icalUrlInput" placeholder="Paste your full iCal link here">
+        <p>First, fill out the three fields above. Then, click this button to proceed.</p>
         <button id="saveLinkBtn">Save Link and Fetch Events</button>
     </div>
 
-    <!-- PHASE 2: User has saved the link and events have been found -->
+    <!-- PHASE 2: User needs to choose filters -->
     <div id="phase2" class="hidden">
         <div class="info">
-            <h2>Step 2: Choose Events to HIDE</h2>
-            <p>Your event types have been found! Check the box next to any event you want to remove. When you're done, click the button to save your final configuration.</p>
+            <h2>Choose Events to HIDE</h2>
+            <p>Your event types have been found! Check the box next to any event you want to remove.</p>
         </div>
         <div id="event-list"></div>
         <br>
