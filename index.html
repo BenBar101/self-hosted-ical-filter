@@ -14,6 +14,7 @@
         .event-item { display: block; margin-bottom: 5px; }
         .info { background-color: #161b22; border: 1px solid #30363d; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;}
         .hidden { display: none; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     </style>
 </head>
 <body>
@@ -22,10 +23,14 @@
     <!-- PHASE 1: User needs to input their link -->
     <div id="phase1">
         <div class="info">
-            <h2>Step 1: Save Your iCal Link</h2>
-            <p>Paste your full iCal link below. Clicking the button will redirect you to GitHub to save a temporary file. This will trigger a background process to find all the event types in your calendar.</p>
+            <h2>Step 1: Provide Your Info</h2>
+            <p>First, tell us where this repository lives. Then, paste your iCal link.</p>
         </div>
-        <input type="text" id="icalUrlInput" placeholder="https://example.com/path/to/your/calendar.ics">
+        <div class="grid">
+            <input type="text" id="githubUser" placeholder="Your GitHub Username">
+            <input type="text" id="githubRepo" placeholder="Your Repository Name">
+        </div>
+        <input type="text" id="icalUrlInput" placeholder="Paste your full iCal link here">
         <button id="saveLinkBtn">Save Link and Fetch Events</button>
     </div>
 
