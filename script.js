@@ -1,17 +1,16 @@
-// script.js (Final, Robust Version)
+// script.js (Final, Corrected Logic)
 
 window.onload = function() {
     try {
         // --- Get references to all HTML elements ---
-        const phase1Div = document.getElementById('phase1');
-        const phase2Div = document.getElementById('phase2');
+        const githubUserInput = document.getElementById('githubUser');
+        const githubRepoInput = document.getElementById('githubRepo');
         const icalUrlInput = document.getElementById('icalUrlInput');
         const saveLinkBtn = document.getElementById('saveLinkBtn');
-        const eventListDiv = document.getElementById('event-list');
         const saveFilterBtn = document.getElementById('saveFilterBtn');
 
         if (!saveLinkBtn || !saveFilterBtn) {
-            alert("CRITICAL ERROR: The script could not find the page's buttons. Check for typos in the id attributes of the index.html file.");
+            alert("CRITICAL ERROR: Could not find page buttons. Check for typos in the 'id' attributes of index.html.");
             return;
         }
 
@@ -52,7 +51,7 @@ function saveLinkAndFetch() {
 
 function saveFinalFilter() {
     const repoInfo = getRepoInfo();
-    if (!repoInfo) return;
+    if (!repoInfo) return; // This should not happen in Phase 2, but it's a good safeguard
 
     const icalUrl = document.getElementById('icalUrlInput').value;
     const checkedBoxes = document.querySelectorAll('#event-list input[type="checkbox"]:checked');
@@ -64,20 +63,34 @@ function saveFinalFilter() {
 }
 
 async function checkConfigurationState() {
+    const phase1Div = document.getElementById('phase1');
+    const phase2Div = document.getElementById('phase2');
+    
     try {
         const response = await fetch(`event-types.json?v=${new Date().getTime()}`);
         if (!response.ok) {
-            document.getElementById('phase1').style.display = 'block';
-            document.getElementById('phase2').style.display = 'none';
+            // Phase 1: file doesn't exist yet
+            phase1Div.style.display = 'block';
+            phase2Div.style.display = 'none';
             return;
         }
+        
+        // Phase 2: file exists!
         const data = await response.json();
         
-        // Populate the UI for Phase 2
-        document.getElementById('githubUser').value = data.user;
-        document.getElementById('githubRepo').value = data.repo;
-        document.getElementById('icalUrlInput').value = data.icalUrl;
+        // Populate and lock the core info fields
+        const githubUserInput = document.getElementById('githubUser');
+        const githubRepoInput = document.getElementById('githubRepo');
+        const icalUrlInput = document.getElementById('icalUrlInput');
+        
+        githubUserInput.value = data.user;
+        githubUserInput.readOnly = true;
+        githubRepoInput.value = data.repo;
+        githubRepoInput.readOnly = true;
+        icalUrlInput.value = data.icalUrl;
+        icalUrlInput.readOnly = true;
 
+        // Populate the event checklist
         const eventListDiv = document.getElementById('event-list');
         eventListDiv.innerHTML = '';
         data.eventTypes.forEach(event => {
@@ -91,11 +104,14 @@ async function checkConfigurationState() {
             eventListDiv.appendChild(label);
         });
 
-        document.getElementById('phase1').style.display = 'none';
-        document.getElementById('phase2').style.display = 'block';
+        // Show the Phase 2 interface
+        phase1Div.style.display = 'none';
+        phase2Div.style.display = 'block';
+
     } catch (e) {
-        document.getElementById('phase1').style.display = 'block';
-        document.getElementById('phase2').style.display = 'none';
+        // If anything fails, default to Phase 1
+        phase1Div.style.display = 'block';
+        phase2Div.style.display = 'none';
     }
 }
 
