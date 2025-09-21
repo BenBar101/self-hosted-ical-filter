@@ -1,0 +1,12 @@
+{
+  "name": "ical-filter",
+  "version": "1.0.0",
+  "description": "Filters an iCal feed",
+  "main": "filter.js",
+  "scripts": {
+    "start": "node filter.js"
+  },
+  "dependencies": {
+    "node-ical": "^0.16.0"
+  }
+}
