@@ -1,0 +1,54 @@
+name: Phase 1 - Fetch Event Types for Configurator
+
+# This action runs ONLY when temp-config.json is created/updated
+on:
+  push:
+    paths:
+      - 'temp-config.json'
+
+jobs:
+  fetch-and-parse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install node-ical
+        run: npm install node-ical
+
+      - name: Run Fetch Script
+        run: |
+          node -e "
+            const fs = require('fs/promises');
+            const ical = require('node-ical');
+            
+            async function run() {
+              const tempConfig = JSON.parse(await fs.readFile('temp-config.json', 'utf8'));
+              const events = await ical.async.fromURL(tempConfig.icalUrl);
+              const uniqueEvents = new Set();
+              for (const event of Object.values(events)) {
+                if (event.type === 'VEVENT' && event.summary) {
+                  uniqueEvents.add(event.summary.trim());
+                }
+              }
+              const output = {
+                icalUrl: tempConfig.icalUrl,
+                eventTypes: [...uniqueEvents].sort()
+              };
+              await fs.writeFile('event-types.json', JSON.stringify(output, null, 2));
+            }
+            run().catch(err => { console.error(err); process.exit(1); });
+          "
+
+      - name: Commit event-types.json
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add event-types.json
+          git commit -m "Generated event types for configurator"
+          git push
