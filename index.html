@@ -8,33 +8,43 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 2rem auto; padding: 0 1rem; color: #e6edf3; background-color: #0d1117; }
         h1, h2 { border-bottom: 1px solid #30363d; padding-bottom: 8px; }
         label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
-        input[type="text"], textarea { width: 100%; padding: 8px; margin-bottom: 1rem; box-sizing: border-box; background-color: #010409; border: 1px solid #30363d; color: #e6edf3; border-radius: 6px; }
+        input[type="text"] { width: 100%; padding: 8px; margin-bottom: 1rem; box-sizing: border-box; background-color: #010409; border: 1px solid #30363d; color: #e6edf3; border-radius: 6px; }
+        input:read-only { background-color: #161b22; color: #888; }
         button { background-color: #238636; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 18px; width: 100%; }
+        #event-list { border: 1px solid #30363d; background-color: #161b22; padding: 10px; border-radius: 6px; max-height: 300px; overflow-y: auto; }
+        .event-item { display: block; margin-bottom: 5px; }
         .info { background-color: #161b22; border: 1px solid #30363d; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;}
+        .hidden { display: none; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     </style>
 </head>
 <body>
     <h1>iCal Filter Configurator</h1>
 
-    <div class="info">
-        <h2>Instructions</h2>
-        <p>This page creates the `config.json` file your repository needs. To find the exact event titles to hide, you must first download the calendar `.ics` file by pasting its link into your browser. Open it with a text editor and find the `SUMMARY:` lines.</p>
+    <!-- PHASE 1: The initial form to collect all necessary data -->
+    <div id="phase1">
+        <div class="info">
+            <h2>Step 1: Fetch Your Events</h2>
+            <p>Fill in your repository info and iCal link. This will trigger a background process to securely find all your calendar's event types.</p>
+        </div>
+        <div class="grid">
+            <input type="text" id="githubUser" placeholder="Your GitHub Username">
+            <input type="text" id="githubRepo" placeholder="Your Repository Name">
+        </div>
+        <input type="text" id="icalUrlInput" placeholder="Paste your full iCal link here">
+        <button id="fetchEventsBtn">Fetch My Events</button>
     </div>
 
-    <label for="githubUser">Your GitHub Username</label>
-    <input type="text" id="githubUser" placeholder="e.g., self-hosted-ical-filter">
-
-    <label for="githubRepo">Your Repository Name</label>
-    <input type="text" id="githubRepo" placeholder="e.g., my-calendar-filter">
-
-    <label for="icalUrlInput">Your Full iCal Link</label>
-    <input type="text" id="icalUrlInput" placeholder="Paste your full iCal link here">
-
-    <label for="filtersText">Event Titles to HIDE (one per line)</label>
-    <textarea id="filtersText" rows="8" placeholder="Title of first event to hide&#10;Another event title to hide"></textarea>
-
-    <button id="generateBtn">Generate Configuration File</button>
+    <!-- PHASE 2: The checklist for the user to make their selections -->
+    <div id="phase2" class="hidden">
+        <div class="info">
+            <h2>Step 2: Choose Events to HIDE</h2>
+            <p>We found your events! Check the box next to any event you want to remove, then click the button to generate your final configuration file.</p>
+        </div>
+        <div id="event-list"></div>
+        <br>
+        <button id="generateConfigBtn">Generate Final Configuration</button>
+    </div>
 
     <script src="script.js"></script>
 </body>
