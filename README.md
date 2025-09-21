@@ -28,3 +28,17 @@ The entire setup is done through a guided web page.
 2.  Go to the **"Code"** tab of your repository. After a minute or two, a file named `filtered-calendar.ics` will appear.
 3.  Click on this file, then click the **"Raw"** button.
 4.  Copy the URL from your browser's address bar. **This is your new, filtered calendar link.**
+
+---
+
+## Troubleshooting
+
+### Error: "Permission to ... denied to github-actions[bot]"
+
+If you check your repository's **"Actions"** tab and see an error that says `Permission denied` or `403`, it means your repository's security settings are too restrictive. Here is the easy fix:
+
+1.  In your repository, go to **Settings > Actions > General**.
+2.  Scroll down to the **"Workflow permissions"** section.
+3.  Select the **"Read and write permissions"** option.
+4.  Click **"Save"**.
+5.  Go back to the **"Actions"** tab, find the failed workflow run, and click **"Re-run all jobs"**.
