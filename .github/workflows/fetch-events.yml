@@ -1,6 +1,5 @@
 name: Phase 1 - Fetch Event Types for Configurator
 
-# This action runs ONLY when temp-config.json is created/updated
 on:
   push:
     paths:
@@ -10,16 +9,11 @@ jobs:
   fetch-and-parse:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '18'
-
-      - name: Install node-ical
-        run: npm install node-ical
+      - run: npm install node-ical
 
       - name: Run Fetch Script
         run: |
@@ -29,7 +23,9 @@ jobs:
             
             async function run() {
               const tempConfig = JSON.parse(await fs.readFile('temp-config.json', 'utf8'));
-              const events = await ical.async.fromURL(tempConfig.icalUrl);
+              // Disguise the request with a browser User-Agent to prevent being blocked
+              const requestOptions = { headers: { 'User-Agent': 'Mozilla/5.0' } };
+              const events = await ical.async.fromURL(tempConfig.icalUrl, requestOptions);
               const uniqueEvents = new Set();
               for (const event of Object.values(events)) {
                 if (event.type === 'VEVENT' && event.summary) {
@@ -37,6 +33,8 @@ jobs:
                 }
               }
               const output = {
+                user: tempConfig.user,
+                repo: tempConfig.repo,
                 icalUrl: tempConfig.icalUrl,
                 eventTypes: [...uniqueEvents].sort()
               };
